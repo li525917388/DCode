@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 编码 -->
+<mapper namespace="com.ldh.dcode.dao.CodeDao">
+	
+	<!-- 获取编码实体信息 -->
+	<select id="queryCodeByPk" parameterType="String" resultType="com.ldh.dcode.entity.Code">
+		select 
+			c.code_key 	as codeKey,
+			c.code_name as codeName,
+			c.invalid 	as invalid,
+			c.version 	as version
+		from dc_code c 
+		where c.code_key=#{pk}
+	</select>
+	
+	
+	<!-- 获取编码详情列表 -->
+	<select id="queryCodeDetails" parameterType="String" resultType="com.ldh.dcode.entity.CodeDetail">
+		select 
+			cd.code_key 	as codeKey,
+			cd.segment_type as segmentType,
+			cd.option_key 	as optionKey,
+			cd.seg_value 	as segValue,
+			cd.length 		as length,
+			cd.format 		as format,
+			cd.order_no 	as orderNo,
+			cd.affect_flow 	as affectFlow
+		from dc_code_detail cd 
+		where cd.code_key=#{pk} 
+		order by cd.order_no
+	</select>
+	
+	
+	<!-- 查询流水实体 -->
+	<select id="queryFlowByPK" parameterType="String" resultType="com.ldh.dcode.entity.Flow">
+		select 
+			flow_key 	as flowKey,
+			code_key 	as codeKey,
+			now_no 		as nowNo,
+			next_no 	as nextNo
+		from dc_flow f 
+		where f.flow_key=#{pk}
+	</select>
+	
+	
+	<!-- 新增流水 -->
+	<insert id="insertFlow" parameterType="com.ldh.dcode.entity.Flow">
+		insert into dc_flow(
+			flow_key,
+			code_key,
+			now_no,
+			next_no
+		)values(
+			#{flowKey},
+			#{codeKey},
+			1,
+			2
+		)
+	</insert>
+	
+	
+	<!-- 更新流水 -->
+	<update id="updateFlow" parameterType="com.ldh.dcode.entity.Flow">
+		update dc_flow 
+		set now_no=#{nowNo} + 1,next_no=#{nextNo} + 1
+		where flow_key=#{flowKey} 
+		and now_no=#{nowNo}
+	</update>
+	
+</mapper>

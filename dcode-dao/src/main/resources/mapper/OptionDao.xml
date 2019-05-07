@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 选择项 -->
+<mapper namespace="com.ldh.dcode.dao.OptionDao">
+	
+	<!-- 查询选择项详情列表 -->
+	<select id="queryOptionDetail" parameterType="java.util.Map" resultType="com.ldh.dcode.entity.OptionDetail">
+		select 
+			od.option_key 	as optionKey,
+			o.property 		as property,
+			od.property_val as propertyVal,
+			od.code_val 	as codeVal
+		from dc_option_detail od 
+		left join dc_option o on o.option_key=od.option_key 
+		where od.option_key=#{optionKey} 
+	</select>
+	
+</mapper>
