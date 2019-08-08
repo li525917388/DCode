@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html class="no-js" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>编码列表</title>
+</head>
+<body>
+
+	<table>
+		<tr>
+			<th>编码标识</th>
+			<th>编码名称</th>
+			<th>是否失效</th>
+			<th>创建时间</th>
+			<th>版本</th>
+			<th></th>
+		</tr>
+		
+		
+		<tr th:each="code : ${codeList}">
+			<td class="pk" th:text="${code.codeKey }"></td>
+			<td th:text="${code.codeName }"></td>
+			<td th:text="${code.invalid }"></td>
+			<td th:text="${code.createTime }"></td>
+			<td th:text="${code.version }"></td>
+			<td>
+				<a th:href='${"codeDetail?pk=" + code.codeKey }'><button class="edit_code_btn" >编辑</button></a>
+				<a th:href='${"removeCode?pk=" + code.codeKey }'><button class="remove_code_btn" >删除</button></a>
+				<a th:href='${"code/getCode?pk=" + code.codeKey }' target="_blank"><button class="get_code_btn" >获取</button></a>
+			</td>
+		</tr>
+	</table>
+	
+
+	<script src="${contextPath}/static/js/jquery.min.js?v=2.1.4"></script>
+	
+	<script type="text/javascript">
+		
+		$(".remove_code_btn").click(function(){
+			
+			var id = $(this).parent().parent().find(".pk").text();
+			alert(id);
+			
+		});
+	
+	</script>
+</body>
+</html>

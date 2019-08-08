@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 选择项 -->
+<mapper namespace="com.ldh.dcode.dao.FormatDao">
+	
+	
+	<!-- 获取时间格式列表 -->
+	<select id="queryFormats" parameterType="String" resultType="com.ldh.dcode.entity.Format">
+		select 
+			f.format_code 	as formatCode,
+			f.format_name	as formatName
+		from dc_format f 
+		where f.code_key=#{codeKey}
+	</select>
+</mapper>

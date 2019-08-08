@@ -1,0 +1,474 @@
+<!DOCTYPE html >
+<html class="no-js" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title th:text="${code.codeName }"></title>
+<style type="text/css">
+.dynamic_td{
+	width: 100px;
+}
+td:nth-child(odd){
+	text-align: right;
+}
+.dynamic_td input{
+	width: 120px;
+}
+.dynamic_td select{
+	width: 124px;
+}
+.affectFlow_td input{
+	width: 13px;
+}
+#preview_div{
+	background-color: #eeeeee;
+	border: 1px #222 solid;
+	width: 300px;
+	height: 50px;
+	padding: 10px 60px;
+	font-size: 30px;
+	margin-top: 10px; 
+}
+
+.nm_td{
+	color: #f00;
+}
+.nm_td input{
+	color: #f00;
+}
+.nm_td select{
+	color: #f00;
+}
+</style>
+</head>
+<body>
+	
+	<h1><th:clock th:text='${code.codeName + "(" + code.codeKey + ")"  }'></th:clock></h1>
+	
+	<form id="inputForm">
+		<!-- 编码标识 -->
+		<input type="hidden" name="codeKey" th:value="${code.codeKey }" />
+		<table>
+			
+			<tr><td><button onclick="add_detail_btn(this)" type="button" title="新增码段">+</button></td></tr>
+			
+			<tr th:each="codeDetail : ${codeDetailList }">
+				<td><button onclick="add_detail_btn(this)" type="button" title="新增">+</button></td>
+				<td><button onclick="remove_detail_btn(this)" type="button" title="删除">-</button> </td>
+				<td>序号：</td>
+				<td><input class="orderNo" type="text" name="orderNo" th:value="${codeDetail.orderNo }"  size="1" /></td>
+				<td>码段类型：</td>
+				<td>
+					<select class="segmentType" name="segmentType" onchange="segmentType_change(this)" >
+						<th:block th:each="segmentType : ${segmentTypeList }">
+							<option th:value="${segmentType.code }" th:text="${segmentType.name }" selected="selected" th:if="${codeDetail.segmentType == segmentType.code }"></option>
+							<option th:value="${segmentType.code }" th:text="${segmentType.name }" th:if="${codeDetail.segmentType != segmentType.code }"></option>
+						</th:block>
+					</select>
+				</td>
+				
+				<th:block th:switch="${codeDetail.segmentType }">
+					
+					<!-- 固定值 -->
+					<th:block th:case="'FIXED'">
+					<td class="dynamic_td segValue_td" >值：</td>
+					<td class="dynamic_td segValue_td" ><input class="segValue" name="segValue" th:value="${codeDetail.segValue }" /></td>
+					
+					<td class="dynamic_td optionKey_td" style="display: none;">属性名称：</td>
+					<td class="dynamic_td optionKey_td" style="display: none;">
+						<select class="optionKey" name="optionKey">
+							<th:block th:each="option : ${optionList }">
+								<option th:value="${option.optionKey }" th:text="${option.property }"></option>
+							</th:block>
+						</select>
+					</td>
+					
+					<td class="dynamic_td format_td" style="display: none;">格式：</td>
+					<td class="dynamic_td format_td" style="display: none;">
+						<select class="format" name="format">
+							<th:block th:each="format : ${formatList }">
+								<option th:value="${format.formatCode }" th:text="${format.formatName }"></option>
+							</th:block>
+							
+						</select>
+					</td>
+					
+					<td class="dynamic_td length_td" style="display: none;">长度：</td>
+					<td class="dynamic_td length_td" style="display: none;">
+						<input class="length" name="length" th:value="${codeDetail.length }" />
+					</td>
+					
+					<td class="dynamic_td affectFlow_td" style="display: none;">约束流水：</td>
+					<td class="dynamic_td affectFlow_td" style="display: none;">
+						<th:block th:switch="${codeDetail.affectFlow }">
+							<input onchange="affectFlow_change(this)" type="checkbox" checked="checked" th:case="1" />
+							<input onchange="affectFlow_change(this)" type="checkbox" th:case="*" />
+						</th:block>
+						
+					</td>	
+					</th:block>
+				
+					<!-- 关联属性 -->
+					<th:block th:case="'OPTION'">
+					<td class="dynamic_td segValue_td" style="display: none;">值：</td>
+					<td class="dynamic_td segValue_td" style="display: none;">
+						<input class="segValue" name="segValue" th:value="${codeDetail.segValue }" />
+					</td>
+					
+					<td class="dynamic_td optionKey_td" >属性名称：</td>
+					<td class="dynamic_td optionKey_td" >
+						<select class="optionKey" name="optionKey">
+							<th:block th:each="option : ${optionList }">
+								<option th:value="${option.optionKey }" th:text="${option.property }"></option>
+							</th:block>
+							
+						</select>
+					</td>
+					
+					<td class="dynamic_td format_td" style="display: none;">格式：</td>
+					<td class="dynamic_td format_td" style="display: none;">
+						<select class="format" name="format">
+							<th:block th:each="format : ${formatList }">
+							<option th:value="${format.formatCode }" th:text="${format.formatName }"></option>
+							</th:block>
+							
+						</select>
+					</td>
+					
+					<td class="dynamic_td length_td" style="display: none;">长度：</td>
+					<td class="dynamic_td length_td" style="display: none;">
+						<input class="length" name="length" th:value="${codeDetail.length }" />
+					</td>
+					
+					<td class="dynamic_td affectFlow_td" >约束流水：</td>
+					<td class="dynamic_td affectFlow_td" >
+						
+						<th:block th:switch="${codeDetail.affectFlow }">
+							<input onchange="affectFlow_change(this)" type="checkbox" checked="checked" th:case="1" />
+							<input onchange="affectFlow_change(this)" type="checkbox" th:case="*" />
+						</th:block>
+						
+					</td>
+					</th:block>
+					
+					
+					
+					<!-- 日期 -->
+					<th:block th:case="'DATE'">
+					<td class="dynamic_td segValue_td" style="display: none;">值：</td>
+					<td class="dynamic_td segValue_td" style="display: none;">
+						<input class="segValue" name="segValue" th:value="${codeDetail.segValue }" />
+					</td>
+					
+					<td class="dynamic_td optionKey_td" style="display: none;">属性名称：</td>
+					<td class="dynamic_td optionKey_td" style="display: none;">
+						<select class="optionKey" name="optionKey">
+							<th:block th:each="option : ${optionList }">
+								<option th:value="${option.optionKey }" th:text="${option.property }"></option>
+							</th:block>
+						</select>
+					</td>
+					
+					<td class="dynamic_td format_td" >格式：</td>
+					<td class="dynamic_td format_td" >
+						<select class="format" name="format">
+							<th:block th:each="format : ${formatList }">
+								
+								<option th:value="${format.formatCode }" selected="selected" th:text="${format.formatName }" th:if="${codeDetail.format == format.formatCode }"></option>
+								<option th:value="${format.formatCode }" th:text="${format.formatName }" th:if="${codeDetail.format != format.formatCode }"></option>
+							</th:block>
+						</select>
+					</td>
+					
+					<td class="dynamic_td length_td" style="display: none;">长度：</td>
+					<td class="dynamic_td length_td" style="display: none;">
+						<input class="length" name="length" th:value="${codeDetail.length }" />
+					</td>
+					
+					<td class="dynamic_td affectFlow_td" >约束流水：</td>
+					<td class="dynamic_td affectFlow_td" >
+						<th:block th:switch="${codeDetail.affectFlow }">
+							<input onchange="affectFlow_change(this)" type="checkbox" checked="checked" th:case="1" />
+							<input onchange="affectFlow_change(this)" type="checkbox" th:case="*" />
+						</th:block>
+						
+					</td>
+					</th:block>
+					
+					
+					
+					<!-- 流水 -->
+					<th:block th:case="'FLOW'">
+					<td class="dynamic_td segValue_td" style="display: none;">值：</td>
+					<td class="dynamic_td segValue_td" style="display: none;">
+						<input class="segValue" name="segValue" th:value="${codeDetail.segValue }" />
+					</td>
+					
+					<td class="dynamic_td optionKey_td" style="display: none;">属性名称：</td>
+					<td class="dynamic_td optionKey_td" style="display: none;">
+						<select class="optionKey" name="optionKey">
+							<th:block th:each="option : ${optionList }">
+								<option th:value="${option.optionKey }" th:text="${option.property }"></option>
+							</th:block>
+						</select>
+					</td>
+					
+					<td class="dynamic_td format_td" style="display: none;">格式：</td>
+					<td class="dynamic_td format_td" style="display: none;">
+						<select class="format" name="format">
+							<th:block th:each="format : ${formatList }">
+							<option th:value="${format.formatCode }" th:text="${format.formatName }"></option>
+							</th:block>
+						</select>
+					</td>
+					
+					<td class="dynamic_td length_td" >长度：</td>
+					<td class="dynamic_td length_td" >
+						<input class="length" name="length" th:value="${codeDetail.length }" />
+					</td>
+					
+					<td class="dynamic_td affectFlow_td" style="display: none;">约束流水：</td>
+					<td class="dynamic_td affectFlow_td" style="display: none;">
+						<th:block th:switch="${codeDetail.affectFlow }">
+							<input onchange="affectFlow_change(this)" type="checkbox" checked="checked" th:case="1" />
+							<input onchange="affectFlow_change(this)" type="checkbox" th:case="*" />
+						</th:block>
+					</td>
+					</th:block>
+					
+				</th:block>
+
+				<td><input type="hidden" name="affectFlow" th:value="${codeDetail.affectFlow }" /></td>
+		
+			</tr>
+			
+			
+		</table>
+	</form>
+	
+	<button id="saveBtn">保存</button>
+	<button id="previewBtn">预览</button>
+	
+	<!-- 预览区 -->
+	<div id="preview_div"></div>
+	
+	
+	<!-- 模板 -->
+	<div style="display: none;">
+		
+		<table style="color: red;">
+			<tbody>
+				<tr id="new_model">
+					<td class="nm_td">
+						<button onclick='add_detail_btn(this)' type='button'>+</button> 
+					</td>
+					<td class="nm_td">
+						<button onclick='remove_detail_btn(this)' type='button'>-</button> 
+					</td>
+					<td class="nm_td">序号：</td>
+					<td class="nm_td"><input class="orderNo" type='text' name='orderNo' value='1'  size='1' /></td>
+					<td class="nm_td">码段类型：</td>
+					<td class="nm_td">
+						<select class="segmentType" name="segmentType" onchange="segmentType_change(this)">
+							<th:block th:each="segmentType : ${segmentTypeList }">
+								<option th:value="${segmentType.code }" th:text="${segmentType.name }"></option>
+							</th:block>
+							
+							
+						</select>
+					</td>
+					
+					<td class="dynamic_td segValue_td nm_td">值：</td>
+					<td class="dynamic_td segValue_td nm_td">
+						<input class="segValue" name="segValue" value="" />
+					</td>
+					
+					<td class="dynamic_td optionKey_td nm_td" style="display: none;">属性名称：</td>
+					<td class="dynamic_td optionKey_td nm_td" style="display: none;">
+						<select class="optionKey" name="optionKey">
+							<th:block th:each="option : ${optionList }">
+								<option th:value="${option.optionKey }" th:text="${option.property }"></option>
+							</th:block>
+							
+						</select>
+					</td>
+					
+					<td class="dynamic_td format_td nm_td" style="display: none;">格式：</td>
+					<td class="dynamic_td format_td nm_td" style="display: none;">
+						<select class="format" name="format">
+							<th:block th:each="format : ${formatList }">
+								<option th:value="${format.formatCode }" th:text="${format.formatName }"></option>
+							</th:block>
+							
+						</select>
+					</td>
+					
+					<td class="dynamic_td length_td nm_td" style="display: none;">长度：</td>
+					<td class="dynamic_td length_td nm_td" style="display: none;">
+						<input class="length" name="length" value="3" />
+					</td>
+					
+					<td class="dynamic_td affectFlow_td nm_td" style="display: none;">约束流水：</td>
+					<td class="dynamic_td affectFlow_td nm_td" style="display: none;">
+						<input onchange="affectFlow_change(this)" type="checkbox" />
+					</td>
+					<td class="nm_td"><input type="hidden" name="affectFlow" value="0" /></td>
+				</tr>
+			</tbody>
+		</table>
+			
+	</div>
+	
+	<script src="js/jquery.min.js?v=2.1.4"></script>
+	
+	<script type="text/javascript">
+		function segmentType_change(mySelf){
+			var val = $(mySelf).val();
+
+			$(mySelf).parent().parent().find(".dynamic_td").hide();
+			
+			//固定值
+			if(val == 'FIXED'){
+				
+				$(mySelf).parent().parent().find(".segValue_td").show();	
+			} 
+			
+			///关联属性
+			else if(val == 'OPTION'){
+				
+				$(mySelf).parent().parent().find(".optionKey_td").show();
+				$(mySelf).parent().parent().find(".affectFlow_td").show();
+			} 
+			
+			///日期
+			else if(val == 'DATE'){
+				
+				$(mySelf).parent().parent().find(".format_td").show();
+				$(mySelf).parent().parent().find(".affectFlow_td").show();
+			} 
+			
+			//流水
+			else if(val == 'FLOW'){
+				
+				$(mySelf).parent().parent().find(".length_td").show();
+			} 
+		}
+		
+		
+		// 关联流水复选框
+		function affectFlow_change(mySelf){
+			var val = $(mySelf).is(':checked');
+		
+			if(val){
+				$(mySelf).parent().parent().find("input[name='affectFlow']").val(1);
+			}else{
+				$(mySelf).parent().parent().find("input[name='affectFlow']").val(0);
+			}
+		}
+		
+		
+		//保存
+		$("#saveBtn").click(function(){
+			
+			var positionArray = $("#inputForm").serializeArray();
+			
+			$.ajax({
+				url: "code/updateCodeDetail",
+				data: positionArray,
+				type: "post",
+				success: function(res){
+					if(res > 0){
+						alert("操作成功");
+					}
+				}
+			});
+			
+		});
+		
+		
+		//新增
+		function add_detail_btn(mySelf){
+			var new_model = $("#new_model").html();
+			$(mySelf).parent().parent().after("<tr>" + new_model + "</tr>");
+			reOrder();
+		}
+		
+		
+		
+		//移除
+		function remove_detail_btn(mySelf){
+			$(mySelf).parent().parent().remove();
+			reOrder();
+		}
+		
+		
+		//重新排序
+		function reOrder(){
+			var i = 1;
+			$("#inputForm .orderNo").each(function(){
+				$(this).val(i++);
+			});
+		}
+		
+		
+		//预览
+		$("#previewBtn").click(function(){
+			
+			var text = "";
+			
+			var segmentTypes = $("#inputForm .segmentType");
+			var segValues = $("#inputForm .segValue");
+			var optionKeys = $("#inputForm .optionKey");
+			var formats = $("#inputForm .format");
+			var lengths = $("#inputForm .length");
+
+			/* <![CDATA[ */
+		 	for(var i = 0; i < segmentTypes.length; i++){
+				
+				var segmentType = $(segmentTypes[i]).val();
+				
+				if(segmentType == "FIXED"){
+					text += $(segValues[i]).val();
+					
+				} else if(segmentType == "OPTION"){
+					//text += $(optionKeys[i]).find("option:selected").text();
+					text += "XXX";
+				} else if(segmentType == "DATE"){
+					var format = $(formats[i]).val();
+					text += new Date().Format(format);
+					
+				} else if(segmentType == "FLOW"){
+					var length = $(lengths[i]).val();
+					
+					for(var len = 0; len < length - 1; len++){
+						text += "0";
+					}
+					
+					text += "1";
+				}
+			} 
+			/* ]]> */
+			
+			$("#preview_div").html(text);
+		});
+	</script>
+	
+	<script type="text/javascript">
+		//时间格式化
+		Date.prototype.Format = function (fmt) {
+		    var o = {
+		        "M+": this.getMonth() + 1, //月份 
+		        "d+": this.getDate(), //日 
+		        "H+": this.getHours(), //小时 
+		        "m+": this.getMinutes(), //分 
+		        "s+": this.getSeconds(), //秒 
+		        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+		        "S": this.getMilliseconds() //毫秒 
+		    };
+		    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+		    for (var k in o)
+		    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+		    return fmt;
+		}
+	</script>
+</body>
+</html>

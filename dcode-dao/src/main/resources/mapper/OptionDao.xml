@@ -16,4 +16,13 @@
 		where od.option_key=#{optionKey} 
 	</select>
 	
+	
+	<!-- 获取关联属性列表 -->
+	<select id="queryOptions" parameterType="String" resultType="com.ldh.dcode.entity.Option">
+		select 
+			o.option_key 	as optionKey,
+			o.property		as property
+		from dc_option o 
+		where o.code_key=#{codeKey}
+	</select>
 </mapper>

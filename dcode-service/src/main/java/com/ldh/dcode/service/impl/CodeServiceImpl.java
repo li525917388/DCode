@@ -8,10 +8,12 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ldh.dcode.comm.enums.SegmentTypeEnum;
 import com.ldh.dcode.dao.CodeDao;
 import com.ldh.dcode.dao.OptionDao;
+import com.ldh.dcode.entity.Code;
 import com.ldh.dcode.entity.CodeDetail;
 import com.ldh.dcode.entity.Flow;
 import com.ldh.dcode.entity.OptionDetail;
@@ -151,6 +153,70 @@ public class CodeServiceImpl implements CodeService {
 		flowNo = flow.getNextNo();
 
 		return flowNo;
+	}
+
+
+
+	@Override
+	public List<Code> queryCodes() {
+		// TODO Auto-generated method stub
+		return codeDao.queryCodes();
+	}
+
+
+
+	@Override
+	public List<CodeDetail> queryCodeDetails(String codeKey) {
+		// TODO Auto-generated method stub
+		return codeDao.queryCodeDetails(codeKey);
+	}
+
+
+
+	/*
+	 * 更新编码详情
+	 * @see com.ldh.dcode.service.CodeService#updateCodeDetail(java.lang.String, java.util.List)
+	 * 2019年5月16日
+	 */
+	@Transactional
+	@Override
+	public int updateCodeDetail(String codeKey, List<CodeDetail> list) {
+		
+		//删除旧详情
+		codeDao.removeCodeDetail(codeKey);
+		
+		int res = codeDao.insertCodeDetail(list);
+		
+		return res;
+	}
+
+
+
+	/*
+	 * 获取编码实体
+	 * @see com.ldh.dcode.service.CodeService#queryCodeByPk()
+	 * 2019年5月16日
+	 */
+	@Override
+	public Code queryCodeByPk(String codeKey) {
+		// TODO Auto-generated method stub
+		return codeDao.queryCodeByPk(codeKey);
+	}
+
+
+
+	/*
+	 * 删除编码
+	 * @see com.ldh.dcode.service.CodeService#removeCode(java.lang.String)
+	 * 2019年5月16日
+	 */
+	@Transactional
+	@Override
+	public int removeCode(String pk) {
+		
+		codeDao.removeCodeDetail(pk);
+		
+		return codeDao.removeCode(pk);
 	}
 
 }

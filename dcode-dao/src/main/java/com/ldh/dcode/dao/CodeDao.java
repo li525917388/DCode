@@ -27,6 +27,14 @@ public interface CodeDao {
 	
 	
 	/**
+	 * 
+	 * @return
+	 */
+	List<Code> queryCodes();
+	
+	
+	
+	/**
 	 * 获取编码详情列表
 	 * @param codeKey
 	 * @return
@@ -65,4 +73,34 @@ public interface CodeDao {
 	 * @return
 	 */
 	int updateFlow(Flow flow);
+
+
+
+	/**
+	 * 删除编码详情
+	 * @param codeKey
+	 * @return
+	 */
+	int removeCodeDetail(String codeKey);
+
+
+
+	/**
+	 * 插入编码详情
+	 * @param list
+	 * @return
+	 */
+	int insertCodeDetail(List<CodeDetail> list);
+
+
+
+	
+	/**
+	 * 删除编码
+	 * @param codeKey
+	 * @return
+	 */
+	int removeCode(String codeKey);
+
+
 }

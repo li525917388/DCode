@@ -3,6 +3,11 @@
 
 <!-- 编码 -->
 <mapper namespace="com.ldh.dcode.dao.CodeDao">
+
+	<!-- 删除编码 -->
+	<delete id="removeCode" parameterType="String">
+		delete from dc_code where code_key=#{codeKey}
+	</delete>
 	
 	<!-- 获取编码实体信息 -->
 	<select id="queryCodeByPk" parameterType="String" resultType="com.ldh.dcode.entity.Code">
@@ -13,6 +18,17 @@
 			c.version 	as version
 		from dc_code c 
 		where c.code_key=#{pk}
+	</select>
+	
+	
+	<!-- 获取编码列表 -->
+	<select id="queryCodes" resultType="com.ldh.dcode.entity.Code">
+		select 
+			c.code_key 	as codeKey,
+			c.code_name as codeName,
+			c.invalid 	as invalid,
+			c.version 	as version
+		from dc_code c 
 	</select>
 	
 	
@@ -68,5 +84,39 @@
 		where flow_key=#{flowKey} 
 		and now_no=#{nowNo}
 	</update>
+	
+	
+	<!-- 删除编码详情 -->
+	<delete id="removeCodeDetail" parameterType="String">
+		delete from dc_code_detail where code_key=#{codeKey }
+	</delete>
+	
+	
+	<!-- 插入编码详情 -->
+	<insert id="insertCodeDetail" parameterType="list">
+		insert into dc_code_detail(
+			code_key,
+			segment_type,
+			option_key,
+			seg_value,
+			length,
+			format,
+			order_no,
+			affect_flow
+		)
+		values
+		<foreach collection="list" item="cd" separator=",">
+		(
+			#{cd.codeKey},
+			#{cd.segmentType},
+			#{cd.optionKey},
+			#{cd.segValue},
+			#{cd.length},
+			#{cd.format},
+			#{cd.orderNo},
+			#{cd.affectFlow}	
+		)
+		</foreach>
+	</insert>
 	
 </mapper>

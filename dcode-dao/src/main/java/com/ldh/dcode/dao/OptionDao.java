@@ -2,6 +2,7 @@ package com.ldh.dcode.dao;
 
 import java.util.List;
 
+import com.ldh.dcode.entity.Option;
 import com.ldh.dcode.entity.OptionDetail;
 
 /**
@@ -20,4 +21,12 @@ public interface OptionDao {
 	 * @return
 	 */
 	List<OptionDetail> queryOptionDetail(int optionKey);
+	
+	
+	/**
+	 * 获取关联属性列表
+	 * @param codeKey
+	 * @return
+	 */
+	List<Option> queryOptions(String codeKey);
 }
