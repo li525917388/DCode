@@ -8,6 +8,8 @@ package com.ldh.dcode.entity;
  */
 public class OptionDetail {
 
+	private int id;				//主键
+	
 	private int optionKey;		//
 	
 	private String property;	//属性名称
@@ -15,6 +17,8 @@ public class OptionDetail {
 	private String propertyVal;	//属性值
 	
 	private String codeVal;		//属性对应编码值
+	
+	private String remark;		// 备注
 
 	public int getOptionKey() {
 		return optionKey;
@@ -46,6 +50,22 @@ public class OptionDetail {
 
 	public void setProperty(String property) {
 		this.property = property;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 }

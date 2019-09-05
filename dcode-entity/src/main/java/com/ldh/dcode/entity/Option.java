@@ -12,6 +12,8 @@ public class Option {
 	
 	private String codeKey;		//编码标识
 	
+	private String codeName;	//编码名称
+	
 	private String property;	//属性名称
 
 	public int getOptionKey() {
@@ -36,6 +38,14 @@ public class Option {
 
 	public void setProperty(String property) {
 		this.property = property;
+	}
+
+	public String getCodeName() {
+		return codeName;
+	}
+
+	public void setCodeName(String codeName) {
+		this.codeName = codeName;
 	}
 	
 }

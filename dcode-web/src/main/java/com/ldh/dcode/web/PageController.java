@@ -14,6 +14,7 @@ import com.ldh.dcode.entity.Code;
 import com.ldh.dcode.entity.CodeDetail;
 import com.ldh.dcode.entity.Format;
 import com.ldh.dcode.entity.Option;
+import com.ldh.dcode.entity.OptionDetail;
 import com.ldh.dcode.service.CodeService;
 import com.ldh.dcode.service.FormatService;
 import com.ldh.dcode.service.OptionService;
@@ -92,6 +93,40 @@ public class PageController {
 		mmap.put("formatList", formatList);
 		
 		return "code/codeDetail";
+	}
+	
+	
+	
+	/**
+	 * 属性列表
+	 * @param mmap
+	 * @return
+	 */
+	@RequestMapping("/option")
+	public String option(ModelMap mmap){
+		
+		List<Option> list = optionService.queryAllOptions();
+		
+		mmap.put("optionList", list);
+		
+		return "option/optionList";
+	}
+	
+	
+	
+	/**
+	 * 属性详情列表
+	 * @param mmap
+	 * @return
+	 */
+	@RequestMapping("/optionDetail")
+	public String optionDetail(ModelMap mmap, int optionKey){
+		
+		List<OptionDetail> list = optionService.queryOptionDetails(optionKey);
+		
+		mmap.put("optionDetailList", list);
+		
+		return "option/optionDetailList";
 	}
 	
 }

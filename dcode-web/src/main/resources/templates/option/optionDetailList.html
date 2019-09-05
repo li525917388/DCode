@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html class="no-js" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>属性详情列表</title>
+</head>
+<body>
+	<table>
+		<tr>
+			<th>主键</th>
+			<th>属性名称</th>
+			<th>属性值</th>
+			<th>目标值</th>
+			<th>描述</th>
+			<th></th>
+		</tr>
+		
+		
+		<tr th:each="optionDetail : ${optionDetailList}">
+			<td class="pk" th:text="${optionDetail.id }"></td>
+			<td th:text="${optionDetail.property }"></td>
+			<td th:text="${optionDetail.propertyVal }"></td>
+			<td th:text="${optionDetail.codeVal }"></td>
+			<td th:text="${optionDetail.remark }"></td>
+			<td>
+				<a th:href='${"editOption?pk=" + optionDetail.optionKey }'><button class="edit_code_btn" >编辑</button></a>
+				<a th:href='${"removeOption?pk=" + optionDetail.optionKey }'><button class="remove_code_btn" >删除</button></a>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

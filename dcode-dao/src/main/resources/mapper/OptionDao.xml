@@ -25,4 +25,94 @@
 		from dc_option o 
 		where o.code_key=#{codeKey}
 	</select>
+	
+	
+	
+	<!-- 获取全部关联属性列表 -->
+	<select id="queryAllOptions" resultType="com.ldh.dcode.entity.Option">
+		select 
+			o.option_key 	as optionKey,
+			o.code_key		as codeKey,
+			c.code_name		as codeName,
+			o.property		as property
+		from dc_option o 
+		left join dc_code c on c.code_key=o.code_key 
+	</select>
+	
+	
+	<!-- 新增 -->
+	<insert id="insertOption" parameterType="com.ldh.dcode.entity.Option">
+		insert into dc_option(
+			property,
+			code_key
+		) values(
+			#{property},
+			#{codeKey}
+		)
+	</insert>
+	
+	
+	<!-- 修改 -->
+	<update id="updateOption" parameterType="com.ldh.dcode.entity.Option">
+		update dc_option 
+		set property=#{property},
+			code_key=#{codeKey}
+		where option_key=#{optionKey}
+	</update>
+	
+	
+	<!-- 删除 -->
+	<delete id="deleteOption" parameterType="int">
+		delete from dc_option where option_key=#{optionKey}
+	</delete>
+	
+	
+	<!-- 获取属性详情列表 -->
+	<select id="queryOptionDetails" parameterType="int" resultType="com.ldh.dcode.entity.OptionDetail">
+		select 
+			od.id as id,
+			od.option_key as optionKey,
+			o.property as property,
+			od.property_val as propertyVal,
+			od.code_val as codeVal,
+			od.remark as remark
+		from dc_option_detail od
+		left join dc_option o on o.option_key=od.option_key
+		where od.option_key = #{optionKey}
+	</select>
+	
+	
+	<!-- 新增详情 -->
+	<insert id="insertOptionDetail" parameterType="com.ldh.dcode.entity.OptionDetail">
+		insert into dc_option_detail(
+			option_key,
+			property_val,
+			code_val,
+			remark
+		)values(
+			#{optionKey},
+			#{propertyVal},
+			#{codeVal},
+			#{remark}
+		)
+	</insert>
+	
+	
+	
+	<!-- 修改详情 -->
+	<update id="updateOptionDetail" parameterType="com.ldh.dcode.entity.OptionDetail">
+		update dc_option_detail 
+		set option_key = #{optionKey},
+			property_val = #{propertyVal},
+			code_val = #{codeVal},
+			remark = #{remark}  
+		where id = #{id}
+	</update>
+	
+	
+	<!-- 删除详情 -->
+	<delete id="deleteOptionDetail" parameterType="int">
+		selete from dc_option_detail where id = #{id}
+	</delete>
+	
 </mapper>

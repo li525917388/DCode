@@ -1,6 +1,7 @@
 package com.ldh.dcode.web;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,11 +38,19 @@ public class CodeController {
 	 */
 	@RequestMapping("/getCode")
 	@ResponseBody
-	public String getCode(String pk){
+	public String getCode(String pk, HttpServletRequest request){
 		
 		Map<String, Object> params = new HashMap<String, Object>();
 		
-		params.put("dept", "cgb");
+		Enumeration<String> enumeration = request.getParameterNames();
+		
+		while(enumeration.hasMoreElements()){
+			String key = enumeration.nextElement();
+			
+			System.out.println(key + ":" + request.getParameter(key));
+			
+			params.put(key, request.getParameter(key));
+		}
 		
 		return codeService.getCode(pk, params );
 	}
